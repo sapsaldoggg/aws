@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    container_name: solobobmysql
+    container_name: mysql
     image: mysql/mysql-server:latest
     environment:
       MYSQL_ROOT_PASSWORD: root_pw
@@ -16,7 +16,7 @@ services:
       - db_network
     restart: always
   redis:
-    container_name: solobobredis
+    container_name: redis
     image: redis:latest
     ports:
       - "6379:6379"
@@ -30,8 +30,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - solobobmysql
-      - solobobredis
+      - mysql
+      - redis
     networks:
       - db_network
 
