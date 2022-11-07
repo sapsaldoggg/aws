@@ -1,0 +1,40 @@
+version: '3'
+services:
+  mysql:
+    container_name: solobobmysql
+    image: mysql/mysql-server:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pw
+      MYSQL_DATABASE: solobob
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: solobob
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    networks:
+      - db_network
+    restart: always
+  redis:
+    container_name: solobobredis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - db_network
+    restart: always
+  spring-boot:
+    container_name: solobob-server
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - solobobmysql
+      - solobobredis
+    networks:
+      - db_network
+
+networks:
+  db_network:
+    driver: bridge
